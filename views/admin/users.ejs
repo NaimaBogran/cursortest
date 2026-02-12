@@ -1,0 +1,73 @@
+<%- include('../partials/header', { title: 'Manage Users - Meeting Tax' }) %>
+
+<div class="admin-page">
+  <div class="page-header">
+    <h1>Manage Users</h1>
+    <p class="page-subtitle">Assign roles and departments to team members.</p>
+  </div>
+
+  <div class="users-table-container">
+    <table class="users-table" id="users-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Department</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="users-tbody">
+        <tr>
+          <td colspan="5" class="loading">Loading users...</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Edit User Modal -->
+<div class="modal" id="edit-user-modal" style="display: none;">
+  <div class="modal-content modal-small">
+    <div class="modal-header">
+      <h2>Edit User</h2>
+      <button class="modal-close" id="edit-modal-close">&times;</button>
+    </div>
+    
+    <form id="edit-user-form">
+      <input type="hidden" id="edit-user-id">
+      
+      <div class="form-group">
+        <label>Name</label>
+        <input type="text" id="edit-user-name" disabled>
+      </div>
+      
+      <div class="form-group">
+        <label for="edit-user-role">Role</label>
+        <select id="edit-user-role" required>
+          <option value="Employee">Employee</option>
+          <option value="Manager">Manager</option>
+          <option value="Executive">Executive</option>
+          <option value="Admin">Admin</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="edit-user-dept">Department</label>
+        <select id="edit-user-dept">
+          <option value="">None</option>
+          <!-- Populated by JS -->
+        </select>
+      </div>
+      
+      <div id="edit-error" class="error-message" style="display: none;"></div>
+      
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" id="cancel-edit">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<%- include('../partials/footer', { pageScript: 'admin-users' }) %>

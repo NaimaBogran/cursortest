@@ -1,0 +1,27 @@
+<%- include('partials/header', { title: 'Meeting Details - Meeting Tax' }) %>
+
+<div class="meeting-detail">
+  <div class="back-link">
+    <a href="/meetings">&larr; Back to Meetings</a>
+  </div>
+
+  <div id="meeting-content">
+    <p class="loading">Loading meeting...</p>
+  </div>
+
+  <!-- Cancel/Delete Confirmation Modal -->
+  <div class="modal" id="delete-modal" style="display: none;">
+    <div class="modal-content modal-small">
+      <h2>Cancel Meeting?</h2>
+      <p class="savings-message">
+        Cancelling this meeting would save <strong id="savings-amount">$0</strong>
+      </p>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="cancel-delete">Keep Meeting</button>
+        <button class="btn btn-danger" id="confirm-delete">Cancel Meeting</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer', { pageScript: 'meeting-detail' }) %>

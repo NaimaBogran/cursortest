@@ -1,0 +1,36 @@
+{
+  "name": "meeting-tax",
+  "version": "1.0.0",
+  "description": "See how much meetings are costing your organization",
+  "main": "index.js",
+  "scripts": {
+    "dev": "convex dev",
+    "start": "node server.js",
+    "build": "convex deploy",
+    "seed": "npx convex run seed:run"
+  },
+  "dependencies": {
+    "@auth/core": "^0.37.4",
+    "@convex-dev/auth": "^0.0.90",
+    "convex": "^1.31.7",
+    "ejs": "^4.0.1",
+    "express": "^5.2.1",
+    "jose": "^6.1.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NaimaBogran/cursortest.git"
+  },
+  "keywords": [
+    "meetings",
+    "cost",
+    "productivity",
+    "enterprise"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NaimaBogran/cursortest/issues"
+  },
+  "homepage": "https://github.com/NaimaBogran/cursortest#readme"
+}

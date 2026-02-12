@@ -1,0 +1,19 @@
+  </main>
+  <footer class="footer">
+    <p>Meeting Tax - Understand the real cost of meetings</p>
+  </footer>
+
+  <!-- Convex Client -->
+  <script src="https://unpkg.com/convex@1.17.0/dist/browser.bundle.js"></script>
+  
+  <!-- App Scripts -->
+  <script src="/js/theme.js"></script>
+  <script src="/js/convex-client.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/nav.js"></script>
+  
+  <% if (typeof pageScript !== 'undefined') { %>
+  <script src="/js/<%= pageScript %>.js"></script>
+  <% } %>
+</body>
+</html>

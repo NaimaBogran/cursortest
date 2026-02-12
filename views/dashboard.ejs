@@ -1,0 +1,53 @@
+<%- include('partials/header', { title: 'Dashboard - Meeting Tax' }) %>
+
+<div class="dashboard">
+  <div class="dashboard-header">
+    <div>
+      <h1>Meeting Tax</h1>
+    </div>
+    <div class="period-toggle">
+      <button class="btn btn-sm active" data-period="week">7 days</button>
+      <button class="btn btn-sm" data-period="month">30 days</button>
+    </div>
+  </div>
+
+  <!-- The number that matters -->
+  <div class="cost-hero" id="cost-hero">
+    <p class="cost-label">Total meeting cost</p>
+    <h2 class="cost-amount" id="total-cost">$0</h2>
+    <p class="cost-period" id="cost-period">this week</p>
+    <p class="cost-meetings" id="meeting-count">across 0 meetings</p>
+  </div>
+
+  <!-- Breakdown - no cards, just data -->
+  <div class="stats-grid">
+    <div class="stats-card">
+      <h3>By Department</h3>
+      <div id="dept-costs" class="stats-list">
+        <p class="loading">Loading...</p>
+      </div>
+    </div>
+
+    <div class="stats-card">
+      <h3>By Role</h3>
+      <div id="role-costs" class="stats-list">
+        <p class="loading">Loading...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Most expensive - the culprits -->
+  <div class="stats-card">
+    <h3>Most Expensive</h3>
+    <div id="top-meetings" class="meetings-list">
+      <p class="loading">Loading...</p>
+    </div>
+  </div>
+
+  <!-- Provocative insight -->
+  <div class="insight-footer" id="insight">
+    <!-- Populated by JS with calculated insight -->
+  </div>
+</div>
+
+<%- include('partials/footer', { pageScript: 'dashboard' }) %>

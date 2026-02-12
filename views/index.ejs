@@ -1,0 +1,36 @@
+<%- include('partials/header', { title: 'Meeting Tax' }) %>
+
+<div class="hero">
+  <img src="/favicon.png" alt="Meeting Tax" class="hero-logo">
+  <h1>Your meetings have a price tag.</h1>
+  <p class="hero-subtitle">
+    Meeting Tax calculates the actual cost of every meeting based on who attends 
+    and for how long. No more guessing.
+  </p>
+  <div class="hero-actions" id="hero-actions">
+    <a href="/signup" class="btn btn-primary">Start tracking</a>
+    <a href="/login" class="btn btn-secondary">Sign in</a>
+  </div>
+</div>
+
+<section class="features">
+  <div class="feature-card">
+    <h3>Real costs</h3>
+    <p>Every meeting gets a dollar amount based on attendee salaries and time spent.</p>
+  </div>
+  <div class="feature-card">
+    <h3>Threshold warnings</h3>
+    <p>Flag meetings that exceed your cost threshold before they happen.</p>
+  </div>
+  <div class="feature-card">
+    <h3>Department breakdown</h3>
+    <p>See which teams spend the most time in meetings.</p>
+  </div>
+</section>
+
+<section class="demo-callout">
+  <h2>$3,420</h2>
+  <p class="callout-subtitle">That's what a 2-hour all-hands costs.</p>
+</section>
+
+<%- include('partials/footer', { pageScript: 'index' }) %>

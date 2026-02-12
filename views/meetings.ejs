@@ -1,0 +1,85 @@
+<%- include('partials/header', { title: 'Meetings - Meeting Tax' }) %>
+
+<div class="meetings-page">
+  <div class="page-header">
+    <div>
+      <h1>Meetings</h1>
+      <p class="page-subtitle">Upcoming scheduled meetings</p>
+    </div>
+    <button class="btn btn-primary" id="new-meeting-btn">New meeting</button>
+  </div>
+
+  <!-- New Meeting Modal -->
+  <div class="modal" id="meeting-modal" style="display: none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modal-title">New meeting</h2>
+        <button class="modal-close" id="modal-close">&times;</button>
+      </div>
+      
+      <form id="meeting-form">
+        <input type="hidden" id="meeting-id">
+        
+        <div class="form-group">
+          <label for="meeting-name">Name</label>
+          <input type="text" id="meeting-name" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="meeting-description">Description <span class="optional">(optional)</span></label>
+          <textarea id="meeting-description" rows="2" placeholder="What is this meeting for?"></textarea>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="meeting-duration">Duration (min)</label>
+            <input type="number" id="meeting-duration" required min="1" value="60">
+          </div>
+          
+          <div class="form-group">
+            <label for="meeting-date">When</label>
+            <input type="datetime-local" id="meeting-date" required>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Attendees</label>
+          <div id="attendees-list" class="attendees-list">
+            <!-- Populated by JS -->
+          </div>
+          <button type="button" class="btn btn-sm" id="add-attendee">+ Add</button>
+        </div>
+        
+        <div class="form-group">
+          <label for="meeting-recurring">Recurring</label>
+          <select id="meeting-recurring">
+            <option value="">No</option>
+            <option value="daily">Daily</option>
+            <option value="weekly">Weekly</option>
+            <option value="biweekly">Bi-weekly</option>
+            <option value="monthly">Monthly</option>
+          </select>
+        </div>
+        
+        <div id="cost-preview" class="cost-preview" style="display: none;">
+          <div class="cost-preview-label">Estimated cost</div>
+          <div class="cost-preview-amount" id="preview-amount">$0</div>
+        </div>
+        
+        <div id="form-error" class="error-message" style="display: none;"></div>
+        
+        <div class="modal-actions">
+          <button type="button" class="btn" id="cancel-meeting">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Meetings List -->
+  <div id="meetings-list" class="meetings-cards">
+    <p class="empty-state">Loading meetings...</p>
+  </div>
+</div>
+
+<%- include('partials/footer', { pageScript: 'meetings' }) %>

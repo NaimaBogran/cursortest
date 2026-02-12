@@ -1,0 +1,36 @@
+<%- include('partials/header', { title: 'Sign Up - Meeting Tax' }) %>
+
+<div class="auth-container">
+  <div class="auth-card">
+    <img src="/favicon.png" alt="Meeting Tax" class="auth-logo">
+    <h1>Create account</h1>
+    <p class="auth-subtitle">First user becomes Admin.</p>
+    
+    <form id="signup-form" class="auth-form">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required minlength="8">
+      </div>
+      
+      <div id="error-message" class="error-message" style="display: none;"></div>
+      
+      <button type="submit" class="btn btn-primary btn-full">Create account</button>
+    </form>
+    
+    <p class="auth-footer">
+      Have an account? <a href="/login">Sign in</a>
+    </p>
+  </div>
+</div>
+
+<%- include('partials/footer', { pageScript: 'signup' }) %>
