@@ -166,3 +166,56 @@ export const validateSession = query({
     return user;
   },
 });
+
+// Request password reset: create a short-lived token, return reset link (caller can show or send by email)
+export const requestPasswordReset = mutation({
+  args: {
+    email: v.string(),
+    baseUrl: v.string(), // e.g. https://yourapp.com - used to build reset link
+  },
+  handler: async (ctx, args) => {
+    const email = args.email.toLowerCase();
+    const creds = await ctx.db
+      .query("credentials")
+      .withIndex("by_email", (q) => q.eq("email", email))
+      .first();
+    if (!creds) {
+      return { success: true }; // Don't reveal whether email exists
+    }
+    const token = generateToken();
+    const expiry = Date.now() + 60 * 60 * 1000; // 1 hour
+    await ctx.db.insert("passwordResetTokens", { email, token, expiry });
+    const base = args.baseUrl.replace(/\/$/, "");
+    const resetLink = `${base}/reset-password?token=${encodeURIComponent(token)}`;
+    return { success: true, resetLink };
+  },
+});
+
+// Reset password using token from email/link
+export const resetPassword = mutation({
+  args: {
+    token: v.string(),
+    newPassword: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const record = await ctx.db
+      .query("passwordResetTokens")
+      .withIndex("by_token", (q) => q.eq("token", args.token))
+      .unique();
+    if (!record || record.expiry < Date.now()) {
+      throw new Error("This reset link is invalid or has expired. Please request a new one.");
+    }
+    const passwordHash = simpleHash(args.newPassword);
+    const creds = await ctx.db
+      .query("credentials")
+      .withIndex("by_email", (q) => q.eq("email", record.email))
+      .first();
+    if (!creds) {
+      await ctx.db.delete(record._id);
+      throw new Error("Account not found. Please request a new reset link.");
+    }
+    await ctx.db.patch(creds._id, { passwordHash });
+    await ctx.db.delete(record._id);
+    return { success: true };
+  },
+});

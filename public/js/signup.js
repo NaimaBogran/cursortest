@@ -31,11 +31,11 @@ document.addEventListener('DOMContentLoaded', function() {
       if (result.success) {
         window.location.href = '/dashboard';
       } else {
-        errorMessage.textContent = result.error || 'Sign up failed. Please try again.';
+        errorMessage.textContent = Helpers.cleanError(result.error || 'Sign up failed.');
         errorMessage.style.display = 'block';
       }
     } catch (error) {
-      errorMessage.textContent = 'An error occurred. Please try again.';
+      errorMessage.textContent = Helpers.cleanError(error);
       errorMessage.style.display = 'block';
     } finally {
       submitBtn.textContent = originalText;

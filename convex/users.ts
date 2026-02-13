@@ -60,7 +60,14 @@ export const updateUserRole = mutation({
     ),
   },
   handler: async (ctx, args) => {
-    const currentUser = await getUserFromToken(ctx, args.token);
+    let currentUser = await getUserFromToken(ctx, args.token);
+    if (!currentUser) {
+      // Fallback: find user by tokenIdentifier (session token stored on user)
+      currentUser = await ctx.db
+        .query("users")
+        .withIndex("by_token", (q: any) => q.eq("tokenIdentifier", args.token))
+        .unique();
+    }
     if (!currentUser) {
       throw new Error("Not authenticated");
     }
@@ -81,7 +88,13 @@ export const updateUserDepartment = mutation({
     departmentId: v.optional(v.id("departments")),
   },
   handler: async (ctx, args) => {
-    const currentUser = await getUserFromToken(ctx, args.token);
+    let currentUser = await getUserFromToken(ctx, args.token);
+    if (!currentUser) {
+      currentUser = await ctx.db
+        .query("users")
+        .withIndex("by_token", (q: any) => q.eq("tokenIdentifier", args.token))
+        .unique();
+    }
     if (!currentUser) {
       throw new Error("Not authenticated");
     }
@@ -113,7 +126,13 @@ export const listUsers = query({
     token: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    const currentUser = await getUserFromToken(ctx, args.token);
+    let currentUser = await getUserFromToken(ctx, args.token);
+    if (!currentUser && args.token) {
+      currentUser = await ctx.db
+        .query("users")
+        .withIndex("by_token", (q: any) => q.eq("tokenIdentifier", args.token))
+        .unique();
+    }
     if (!currentUser || currentUser.role !== "Admin") {
       return [];
     }

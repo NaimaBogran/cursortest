@@ -206,8 +206,9 @@ meeting-tax/
    npx vercel
    ```
 
-4. **Set environment variables in Vercel:**
-   - `CONVEX_URL` - Your Convex production deployment URL
+4. **Set environment variables in Vercel:**  
+   In Vercel: Project → Settings → Environment Variables. Add:
+   - `CONVEX_URL` – Your Convex production URL (Convex dashboard → Settings → Deployment URL)
 
 5. **Deploy:**
    ```bash

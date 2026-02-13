@@ -79,7 +79,8 @@ async function signUp(email, password, name) {
     return { success: false, error: 'Sign up failed' };
   } catch (error) {
     console.error('Sign up error:', error);
-    return { success: false, error: error.message || 'Sign up failed' };
+    const msg = (window.Helpers && window.Helpers.cleanError) ? window.Helpers.cleanError(error) : (error.message || 'Sign up failed');
+    return { success: false, error: msg };
   }
 }
 
@@ -102,7 +103,8 @@ async function signIn(email, password) {
     return { success: false, error: 'Invalid credentials' };
   } catch (error) {
     console.error('Sign in error:', error);
-    return { success: false, error: error.message || 'Sign in failed' };
+    const msg = (window.Helpers && window.Helpers.cleanError) ? window.Helpers.cleanError(error) : (error.message || 'Sign in failed');
+    return { success: false, error: msg };
   }
 }
 

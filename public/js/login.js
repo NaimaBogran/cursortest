@@ -9,7 +9,18 @@ document.addEventListener('DOMContentLoaded', function() {
   
   const form = document.getElementById('login-form');
   const errorMessage = document.getElementById('error-message');
-  
+  const successMessage = document.getElementById('success-message');
+
+  // Show success message if redirected after password reset
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('reset') === 'success') {
+    if (successMessage) {
+      successMessage.textContent = 'Password reset successfully. You can sign in now.';
+      successMessage.style.display = 'block';
+    }
+    window.history.replaceState({}, '', '/login');
+  }
+
   form.addEventListener('submit', async function(e) {
     e.preventDefault();
     
@@ -23,18 +34,19 @@ document.addEventListener('DOMContentLoaded', function() {
     submitBtn.disabled = true;
     
     errorMessage.style.display = 'none';
-    
+    if (successMessage) successMessage.style.display = 'none';
+
     try {
       const result = await Auth.signIn(email, password);
       
       if (result.success) {
         window.location.href = '/dashboard';
       } else {
-        errorMessage.textContent = result.error || 'Sign in failed. Please check your credentials.';
+        errorMessage.textContent = Helpers.cleanError(result.error || 'Sign in failed.');
         errorMessage.style.display = 'block';
       }
     } catch (error) {
-      errorMessage.textContent = 'An error occurred. Please try again.';
+      errorMessage.textContent = Helpers.cleanError(error);
       errorMessage.style.display = 'block';
     } finally {
       submitBtn.textContent = originalText;

@@ -11,8 +11,8 @@ app.set('views', path.join(__dirname, 'views'));
 // Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Convex URL for templates
-const CONVEX_URL = 'https://opulent-starling-925.convex.cloud';
+// Convex URL for templates (use CONVEX_URL env in production, e.g. on Vercel)
+const CONVEX_URL = process.env.CONVEX_URL || 'https://frugal-dog-686.convex.cloud';
 
 // Routes
 app.get('/', (req, res) => {
@@ -25,6 +25,14 @@ app.get('/login', (req, res) => {
 
 app.get('/signup', (req, res) => {
   res.render('signup', { convexUrl: CONVEX_URL });
+});
+
+app.get('/forgot-password', (req, res) => {
+  res.render('forgot-password', { convexUrl: CONVEX_URL });
+});
+
+app.get('/reset-password', (req, res) => {
+  res.render('reset-password', { convexUrl: CONVEX_URL });
 });
 
 app.get('/profile', (req, res) => {

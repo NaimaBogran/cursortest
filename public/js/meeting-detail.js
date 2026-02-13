@@ -117,7 +117,7 @@ function setupDeleteModal() {
       alert(`Meeting cancelled! You saved ${Helpers.formatCurrency(result.savingsCents)}`);
       window.location.href = '/meetings';
     } catch (error) {
-      alert('Failed to cancel meeting: ' + error.message);
+      alert('Failed to cancel meeting: ' + (Helpers.cleanError ? Helpers.cleanError(error) : error.message));
     } finally {
       confirmBtn.textContent = 'Cancel Meeting';
       confirmBtn.disabled = false;

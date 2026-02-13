@@ -1,9 +1,9 @@
 // Convex Client Initialization
 // This file sets up the Convex client for use across all pages
 
-// Your Convex deployment URL
-const DEFAULT_CONVEX_URL = 'https://opulent-starling-925.convex.cloud';
-const CONVEX_URL = localStorage.getItem('CONVEX_URL') || DEFAULT_CONVEX_URL;
+// Your Convex deployment URL (from server env, localStorage, or fallback)
+const DEFAULT_CONVEX_URL = 'https://frugal-dog-686.convex.cloud';
+const CONVEX_URL = (typeof window !== 'undefined' && window.__CONVEX_URL) || localStorage.getItem('CONVEX_URL') || DEFAULT_CONVEX_URL;
 
 let convexClient = null;
 let initPromise = null;

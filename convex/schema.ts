@@ -30,6 +30,13 @@ export default defineSchema({
     .index("by_email", ["email"])
     .index("by_token", ["sessionToken"]),
 
+  // Password reset tokens (short-lived, one-time use)
+  passwordResetTokens: defineTable({
+    email: v.string(),
+    token: v.string(),
+    expiry: v.number(),
+  }).index("by_token", ["token"]),
+
   // Departments (e.g., Engineering, Product, Design)
   departments: defineTable({
     name: v.string(),

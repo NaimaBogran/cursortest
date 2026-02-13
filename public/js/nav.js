@@ -11,6 +11,11 @@ async function updateNavigation() {
   if (!navLinks || !navUser) return;
   
   const isLoggedIn = Auth.isAuthenticated();
+  // So Convex mutations that use getUserIdentity() (roles, departments, settings) work
+  if (isLoggedIn && typeof ConvexApp !== 'undefined' && ConvexApp.setAuth) {
+    const token = Auth.getToken();
+    if (token) ConvexApp.setAuth(token);
+  }
   
   if (isLoggedIn) {
     const user = await Auth.getCurrentUser();
@@ -100,9 +105,27 @@ function formatDuration(minutes) {
   return mins > 0 ? `${hours}h ${mins}m` : `${hours}h`;
 }
 
+// Strip Convex request IDs and stack noise; return a short user-facing message
+function cleanError(error) {
+  const raw = typeof error === 'string' ? error : (error && error.message) ? error.message : '';
+  if (!raw) return 'Something went wrong.';
+  let msg = raw
+    .replace(/\s*\[CONVEX[^\]]*\]/gi, '')
+    .replace(/\s*\[Request ID:[^\]]*\]/gi, '')
+    .replace(/\s*at handler\s*\([^)]*\)/gi, '')
+    .replace(/\s*Called by client\.?/gi, '')
+    .replace(/\s*Server Error\s*/gi, ' ')
+    .replace(/\s*Uncaught Error:\s*/gi, '')
+    .trim();
+  const afterError = msg.match(/Error:\s*(.+?)(?:\s+at\s|$)/i);
+  if (afterError) msg = afterError[1].trim();
+  return msg || 'Something went wrong.';
+}
+
 // Export helpers
 window.Helpers = {
   formatCurrency,
   formatDate,
   formatDuration,
+  cleanError,
 };

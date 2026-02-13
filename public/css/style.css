@@ -153,13 +153,30 @@ h3, h4, h5, h6 {
 .navbar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   padding: var(--space-sm) var(--space-lg);
   border-bottom: 1px solid var(--border);
   background: var(--bg-primary);
   position: sticky;
   top: 0;
   z-index: 100;
+}
+
+.nav-brand {
+  flex-shrink: 0;
+}
+
+.navbar-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  min-width: 0;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  flex-shrink: 0;
 }
 
 .nav-brand a {
@@ -412,6 +429,13 @@ h3, h4, h5, h6 {
   transition: border-color 0.15s;
 }
 
+.form-hint {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: var(--space-xs);
+}
+
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
@@ -436,6 +460,31 @@ h3, h4, h5, h6 {
   border-left: 2px solid var(--cost-high);
   font-size: 0.875rem;
   margin-top: var(--space-md);
+}
+
+.success-message {
+  background: rgba(62, 138, 92, 0.1);
+  color: var(--cost-low);
+  padding: var(--space-md);
+  border-left: 2px solid var(--cost-low);
+  font-size: 0.875rem;
+  margin-top: var(--space-md);
+}
+
+.success-message a.reset-link {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.forgot-link {
+  display: inline-block;
+  font-size: 0.8rem;
+  margin-top: var(--space-xs);
+  color: var(--text-muted);
+}
+
+.forgot-link:hover {
+  color: var(--accent);
 }
 
 /* === DASHBOARD === */
@@ -1377,6 +1426,36 @@ h3, h4, h5, h6 {
   font-size: 0.875rem;
 }
 
+/* Roles / Departments list items */
+.roles-list,
+.departments-list {
+  margin-top: var(--space-md);
+}
+
+.list-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-sm) 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.list-item-name {
+  font-weight: 500;
+  min-width: 140px;
+}
+
+.list-item-meta {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  flex: 1;
+}
+
+.list-item-actions {
+  display: flex;
+  gap: var(--space-sm);
+}
+
 /* Threshold */
 .threshold-setting {
   display: flex;
@@ -1511,8 +1590,13 @@ h3, h4, h5, h6 {
     gap: var(--space-md);
   }
   
-  .nav-links {
+  .navbar-center {
     order: 3;
+    width: 100%;
+    justify-content: flex-start;
+  }
+  
+  .nav-links {
     width: 100%;
     justify-content: flex-start;
     gap: var(--space-md);

@@ -328,9 +328,9 @@ export const remove = mutation({
       throw new Error("Meeting not found");
     }
 
-    // Only creator or Admin can delete
-    if (meeting.createdBy !== user._id && user.role !== "Admin") {
-      throw new Error("Not authorized to delete this meeting");
+    // Admin can cancel any meeting; otherwise only the creator can cancel their own
+    if (user.role !== "Admin" && meeting.createdBy !== user._id) {
+      throw new Error("Only the meeting creator or an admin can cancel this meeting");
     }
 
     // If cancelOnly flag is set, only allow cancelling future meetings

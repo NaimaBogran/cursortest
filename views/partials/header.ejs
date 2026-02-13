@@ -8,6 +8,10 @@
   <link rel="apple-touch-icon" href="/favicon.png">
   <link rel="stylesheet" href="/css/style.css">
   <script>
+    // Convex URL from server (set by Vercel CONVEX_URL or local server)
+    window.__CONVEX_URL = <%= typeof convexUrl !== 'undefined' && convexUrl ? JSON.stringify(convexUrl) : '""' %>;
+  </script>
+  <script>
     // Apply saved theme immediately to prevent flash
     (function() {
       const theme = localStorage.getItem('theme');
@@ -25,13 +29,16 @@
         <span class="nav-brand-text">Meeting Tax</span>
       </a>
     </div>
-    <div class="nav-links" id="nav-links">
-      <!-- Populated by JS based on auth state -->
+    <div class="navbar-center">
+      <div class="nav-links" id="nav-links">
+        <!-- Populated by JS based on auth state -->
+      </div>
     </div>
-    <div class="nav-user" id="nav-user">
-      <!-- Populated by JS based on auth state -->
-    </div>
-    <button class="theme-toggle" id="theme-toggle" title="Toggle dark mode">
+    <div class="nav-right">
+      <div class="nav-user" id="nav-user">
+        <!-- Populated by JS based on auth state -->
+      </div>
+      <button class="theme-toggle" id="theme-toggle" title="Toggle dark mode">
       <svg class="theme-icon-light" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <circle cx="12" cy="12" r="5"></circle>
         <line x1="12" y1="1" x2="12" y2="3"></line>
@@ -46,6 +53,7 @@
       <svg class="theme-icon-dark" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
       </svg>
-    </button>
+      </button>
+    </div>
   </nav>
   <main class="container">

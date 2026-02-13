@@ -2,6 +2,10 @@ const ejs = require('ejs');
 const path = require('path');
 const fs = require('fs');
 
+// On Vercel, project root is cwd; views are included via includeFiles
+const projectRoot = process.cwd();
+const viewsDir = path.join(projectRoot, 'views');
+
 module.exports = async (req, res) => {
   const page = req.query.page || 'index';
   
@@ -11,6 +15,8 @@ module.exports = async (req, res) => {
     'index': 'index',
     'login': 'login',
     'signup': 'signup',
+    'forgot-password': 'forgot-password',
+    'reset-password': 'reset-password',
     'profile': 'profile',
     'dashboard': 'dashboard',
     'meetings': 'meetings',
@@ -21,7 +27,7 @@ module.exports = async (req, res) => {
   };
 
   const viewName = pageMap[page] || 'index';
-  const viewPath = path.join(process.cwd(), 'views', `${viewName}.ejs`);
+  const viewPath = path.join(viewsDir, `${viewName}.ejs`);
 
   // Check if view exists
   if (!fs.existsSync(viewPath)) {
@@ -35,7 +41,7 @@ module.exports = async (req, res) => {
       // Pass Convex URL from environment
       convexUrl: process.env.CONVEX_URL || '',
     }, {
-      views: [path.join(process.cwd(), 'views')],
+      views: [viewsDir],
     });
 
     res.setHeader('Content-Type', 'text/html');

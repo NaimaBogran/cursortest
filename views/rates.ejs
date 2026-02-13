@@ -3,7 +3,34 @@
 <div class="rates-page">
   <div class="page-header">
     <h1>Rate Configuration</h1>
-    <p class="page-subtitle">Set hourly rates by role. Add department overrides for specific teams.</p>
+    <p class="page-subtitle">Manage roles, departments, and hourly rates. Set default rates and department overrides.</p>
+  </div>
+
+  <!-- Seed preset data (if empty) -->
+  <div class="rates-section" id="seed-section" style="display: none;">
+    <h2>Get Started</h2>
+    <p class="section-note">No roles or departments yet. Seed the database with preset roles (Engineer, PM, Designer, etc.) and departments (Engineering, Product, Design, Marketing, Sales) plus default hourly rates.</p>
+    <button class="btn btn-primary" id="seed-btn">Seed Preset Data</button>
+  </div>
+
+  <!-- Roles -->
+  <div class="rates-section">
+    <h2>Roles</h2>
+    <p class="section-note">Job roles used for meeting attendees and rate configuration.</p>
+    <button class="btn btn-secondary" id="add-role-btn">+ Add Role</button>
+    <div id="roles-list" class="roles-list">
+      <p class="loading">Loading...</p>
+    </div>
+  </div>
+
+  <!-- Departments -->
+  <div class="rates-section">
+    <h2>Departments</h2>
+    <p class="section-note">Departments for organizing users and rate overrides.</p>
+    <button class="btn btn-secondary" id="add-dept-btn">+ Add Department</button>
+    <div id="departments-list" class="departments-list">
+      <p class="loading">Loading...</p>
+    </div>
   </div>
 
   <!-- Default Rates -->
@@ -23,6 +50,63 @@
     
     <div id="override-rates" class="overrides-list">
       <!-- Populated by JS -->
+    </div>
+  </div>
+
+  <!-- Add/Edit Role Modal -->
+  <div class="modal" id="role-modal" style="display: none;">
+    <div class="modal-content modal-small">
+      <div class="modal-header">
+        <h2 id="role-modal-title">Add Role</h2>
+        <button class="modal-close" id="role-modal-close">&times;</button>
+      </div>
+      <form id="role-form">
+        <input type="hidden" id="role-id" value="">
+        <div class="form-group">
+          <label for="role-name">Name</label>
+          <input type="text" id="role-name" required placeholder="e.g. Engineer">
+        </div>
+        <div class="form-group">
+          <label for="role-slug">Slug (lowercase, no spaces)</label>
+          <input type="text" id="role-slug" required placeholder="e.g. engineer">
+        </div>
+        <div class="form-group" id="role-rate-group">
+          <label for="role-rate">Default hourly rate ($)</label>
+          <input type="number" id="role-rate" min="0" step="0.01" placeholder="150.00">
+          <span class="form-hint">Optional. Set now or later in Default Rates below.</span>
+        </div>
+        <div id="role-error" class="error-message" style="display: none;"></div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" id="cancel-role">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Role</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add/Edit Department Modal -->
+  <div class="modal" id="dept-modal" style="display: none;">
+    <div class="modal-content modal-small">
+      <div class="modal-header">
+        <h2 id="dept-modal-title">Add Department</h2>
+        <button class="modal-close" id="dept-modal-close">&times;</button>
+      </div>
+      <form id="dept-form">
+        <input type="hidden" id="dept-id" value="">
+        <div class="form-group">
+          <label for="dept-name">Name</label>
+          <input type="text" id="dept-name" required placeholder="e.g. Engineering">
+        </div>
+        <div class="form-group">
+          <label for="dept-slug">Slug (lowercase, no spaces)</label>
+          <input type="text" id="dept-slug" required placeholder="e.g. engineering">
+        </div>
+        <div id="dept-error" class="error-message" style="display: none;"></div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" id="cancel-dept">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Department</button>
+        </div>
+      </form>
     </div>
   </div>
 

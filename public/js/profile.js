@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', async function() {
       
       window.location.href = '/dashboard';
     } catch (error) {
-      errorMessage.textContent = error.message || 'Failed to save profile.';
+      errorMessage.textContent = (Helpers.cleanError ? Helpers.cleanError(error) : error.message) || 'Failed to save profile.';
       errorMessage.style.display = 'block';
     } finally {
       submitBtn.textContent = originalText;

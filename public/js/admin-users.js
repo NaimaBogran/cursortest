@@ -92,7 +92,7 @@ function setupEditModal() {
       modal.style.display = 'none';
       await loadUsers();
     } catch (error) {
-      document.getElementById('edit-error').textContent = error.message;
+      document.getElementById('edit-error').textContent = Helpers.cleanError(error);
       document.getElementById('edit-error').style.display = 'block';
     } finally {
       submitBtn.textContent = 'Save';

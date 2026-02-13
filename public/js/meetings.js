@@ -73,9 +73,6 @@ async function loadMeetings() {
       } else {
         meetingsList.innerHTML = '<p class="empty-state">No upcoming meetings scheduled</p>';
       }
-    } else {
-      meetingsList.innerHTML = '<p class="empty-state">No upcoming meetings scheduled</p>';
-    }
   } catch (error) {
     console.error('Error loading meetings:', error);
     meetingsList.innerHTML = '<p class="loading">Error loading meetings</p>';
@@ -234,7 +231,7 @@ async function handleSubmit(e) {
     await loadMeetings();
     
   } catch (error) {
-    document.getElementById('form-error').textContent = error.message || 'Failed to save';
+    document.getElementById('form-error').textContent = (typeof Helpers !== 'undefined' && Helpers.cleanError) ? Helpers.cleanError(error) : (error.message || 'Failed to save');
     document.getElementById('form-error').style.display = 'block';
   } finally {
     submitBtn.textContent = 'Save';
@@ -269,7 +266,7 @@ async function cancelMeeting(meetingId, meetingName, event) {
     await loadMeetings();
   } catch (error) {
     console.error('Error cancelling meeting:', error);
-    showNotification('Failed to cancel meeting: ' + error.message, 'error');
+    showNotification('Failed to cancel meeting: ' + ((typeof Helpers !== 'undefined' && Helpers.cleanError) ? Helpers.cleanError(error) : error.message), 'error');
   }
 }
 
