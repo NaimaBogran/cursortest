@@ -31,10 +31,11 @@ export const signUp = mutation({
     name: v.string(),
   },
   handler: async (ctx, args) => {
+    const email = args.email.toLowerCase().trim();
     // Check if user already exists
     const existing = await ctx.db
       .query("credentials")
-      .withIndex("by_email", (q) => q.eq("email", args.email.toLowerCase()))
+      .withIndex("by_email", (q) => q.eq("email", email))
       .first();
     
     if (existing) {
@@ -54,7 +55,7 @@ export const signUp = mutation({
 
     // Create user
     const userId = await ctx.db.insert("users", {
-      email: args.email.toLowerCase(),
+      email,
       name: args.name,
       role: role,
       tokenIdentifier: sessionToken,
@@ -62,7 +63,7 @@ export const signUp = mutation({
 
     // Store credentials
     await ctx.db.insert("credentials", {
-      email: args.email.toLowerCase(),
+      email,
       passwordHash,
       userId,
       sessionToken,
@@ -84,10 +85,11 @@ export const signIn = mutation({
     password: v.string(),
   },
   handler: async (ctx, args) => {
+    const email = args.email.toLowerCase().trim();
     // Find credentials
     const creds = await ctx.db
       .query("credentials")
-      .withIndex("by_email", (q) => q.eq("email", args.email.toLowerCase()))
+      .withIndex("by_email", (q) => q.eq("email", email))
       .first();
 
     if (!creds) {
@@ -174,11 +176,16 @@ export const requestPasswordReset = mutation({
     baseUrl: v.string(), // e.g. https://yourapp.com - used to build reset link
   },
   handler: async (ctx, args) => {
-    const email = args.email.toLowerCase();
-    const creds = await ctx.db
+    const email = args.email.toLowerCase().trim();
+    let creds = await ctx.db
       .query("credentials")
       .withIndex("by_email", (q) => q.eq("email", email))
       .first();
+    if (!creds) {
+      // Fallback: match by normalized email (handles existing data stored with spaces)
+      const allCreds = await ctx.db.query("credentials").collect();
+      creds = allCreds.find((c) => c.email.toLowerCase().trim() === email) ?? null;
+    }
     if (!creds) {
       return { success: true }; // Don't reveal whether email exists
     }

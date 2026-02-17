@@ -24,8 +24,8 @@ document.addEventListener('DOMContentLoaded', function() {
       const baseUrl = window.location.origin;
       const result = await ConvexApp.mutation('customAuth:requestPasswordReset', { email, baseUrl });
 
-      if (result.resetLink) {
-        successEl.innerHTML = 'Use this link to reset your password (valid for 1 hour):<br><a href="' + result.resetLink + '" class="reset-link">Reset password</a>';
+      if (result && result.resetLink) {
+        successEl.innerHTML = '<p>Use this link to reset your password (valid for 1 hour):</p><p><a href="' + result.resetLink + '" class="reset-link btn btn-primary">Reset my password</a></p>';
         successEl.style.display = 'block';
         form.reset();
       } else {
