@@ -19,7 +19,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/NaimaBogran/cursortest.git"
+    "url": "git+https://github.com/NaimaBogran/meeting-tax.git"
   },
   "keywords": [
     "meetings",
@@ -27,10 +27,10 @@
     "productivity",
     "enterprise"
   ],
-  "author": "",
+  "author": "Naima Bogran",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/NaimaBogran/cursortest/issues"
+    "url": "https://github.com/NaimaBogran/meeting-tax/issues"
   },
-  "homepage": "https://github.com/NaimaBogran/cursortest#readme"
+  "homepage": "https://github.com/NaimaBogran/meeting-tax#readme"
 }
