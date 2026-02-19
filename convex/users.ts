@@ -1,5 +1,5 @@
 import { v } from "convex/values";
-import { mutation, query } from "./_generated/server";
+import { internalMutation, mutation, query } from "./_generated/server";
 
 // Helper to get user from session token
 async function getUserFromToken(ctx: any, token: string | undefined) {
@@ -107,8 +107,9 @@ export const updateUserDepartment = mutation({
   },
 });
 
-// Promote first user to Admin (one-time setup)
-export const promoteFirstUserToAdmin = mutation({
+// Promote first user to Admin (one-time setup).
+// Internal only: not callable from the client. Use from a one-off script or Convex dashboard if needed.
+export const promoteFirstUserToAdmin = internalMutation({
   args: {},
   handler: async (ctx) => {
     const users = await ctx.db.query("users").collect();

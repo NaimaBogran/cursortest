@@ -1,0 +1,76 @@
+{
+  "summary": "Security audit of Convex backend (schema, meetings, users, customAuth), Express server, and Vercel API. Critical issues: weak password hashing, unauthenticated role-promotion mutation, and meeting get() bypasses role-based access. Additional issues: non-crypto session tokens, no rate limiting on auth, unvalidated password-reset baseUrl, hardcoded Convex URL in frontend, and missing security headers.",
+  "risk_level": "high",
+  "findings": [
+    {
+      "title": "Weak password hashing (reversible, no salt)",
+      "severity": "high",
+      "file": "convex/customAuth.ts",
+      "description": "simpleHash() uses a non-cryptographic hash (djb2-style) with no salt. Passwords are predictable and effectively reversible for short inputs; same password always yields same hash. Comment admits 'in production use bcrypt via action' but code is used as-is.",
+      "recommended_fix": "Use a Convex action to hash passwords with bcrypt or argon2 (or use Convex's recommended auth). Do not store passwords with simpleHash in production."
+    },
+    {
+      "title": "Unauthenticated promoteFirstUserToAdmin mutation",
+      "severity": "high",
+      "file": "convex/users.ts",
+      "description": "promoteFirstUserToAdmin has no authentication. Any caller can invoke it. When exactly one user exists with role Employee, that user is promoted to Admin, enabling privilege escalation.",
+      "recommended_fix": "Remove this mutation or protect it (e.g. internal-only or one-time deploy script). If kept, require a secure one-time token or run only from a trusted backend."
+    },
+    {
+      "title": "Meeting get() bypasses role-based access control",
+      "severity": "high",
+      "file": "convex/meetings.ts",
+      "description": "get() returns any meeting by id for any authenticated user. It does not enforce the same rules as list(): Employees should only see meetings they created; Managers only meetings in their department. An Employee can read another user's meeting by guessing or enumerating meeting ids.",
+      "recommended_fix": "After loading the meeting, apply the same role checks as in list(): if user.role === 'Employee' require meeting.createdBy === user._id; if 'Manager' and user.departmentId, require meeting attendees include that department; then return null or throw if not allowed."
+    },
+    {
+      "title": "Session token not cryptographically secure",
+      "severity": "medium",
+      "file": "convex/customAuth.ts",
+      "description": "generateToken() uses Math.random(), which is not cryptographically secure. Session tokens could be predictable, enabling session fixation or brute force.",
+      "recommended_fix": "Use crypto.randomBytes (Node) or crypto.getRandomValues (browser) or Convex's crypto APIs to generate session tokens; e.g. 32 bytes hex-encoded."
+    },
+    {
+      "title": "No rate limiting on auth mutations",
+      "severity": "medium",
+      "file": "convex/customAuth.ts",
+      "description": "signIn, signUp, requestPasswordReset, and resetPassword have no rate limiting. Attackers can brute-force passwords, enumerate valid emails via password reset, or abuse signup.",
+      "recommended_fix": "Add rate limiting (e.g. per IP or per identifier) in Convex or at the edge (Vercel/server). Throttle failed sign-in and reset attempts and cap signup/reset requests per hour."
+    },
+    {
+      "title": "Password reset baseUrl not validated (phishing/open redirect)",
+      "severity": "medium",
+      "file": "convex/customAuth.ts",
+      "description": "requestPasswordReset accepts baseUrl from the client and builds resetLink from it. A malicious client can pass a phishing domain; the generated link could point to an attacker site and leak the reset token in the URL.",
+      "recommended_fix": "Do not accept baseUrl from the client. Use a server-side configured base URL (env var) to build reset links. If client must hint the host, validate it against an allowlist of known domains."
+    },
+    {
+      "title": "Hardcoded Convex URL in frontend",
+      "severity": "low",
+      "file": "public/js/convex-client.js",
+      "description": "DEFAULT_CONVEX_URL is hardcoded as 'https://frugal-dog-686.convex.cloud'. Exposes deployment identifier and ties frontend to one backend; if rotated, client may still use old URL until code is updated.",
+      "recommended_fix": "Serve CONVEX_URL only from the server (injected into the page or from a small config endpoint). Remove hardcoded fallback or use a build-time env placeholder."
+    },
+    {
+      "title": "Missing security headers on Express and Vercel responses",
+      "severity": "low",
+      "file": "server.js",
+      "description": "Express app does not set security headers (Content-Security-Policy, X-Frame-Options, X-Content-Type-Options, Strict-Transport-Security). api/render.js also does not set them. Increases risk of clickjacking, MIME sniffing, and some XSS.",
+      "recommended_fix": "Add helmet or set headers explicitly: X-Frame-Options: DENY, X-Content-Type-Options: nosniff, Content-Security-Policy (restrict scripts/sources). Set same headers in api/render.js for Vercel."
+    },
+    {
+      "title": "settings table allows arbitrary value (v.any())",
+      "severity": "low",
+      "file": "convex/schema.ts",
+      "description": "settings.value is v.any(). Any data can be stored without validation. If sensitive data (e.g. keys) are stored here, schema does not enforce structure or access control.",
+      "recommended_fix": "Replace with a union of allowed value shapes (e.g. v.union(v.number(), v.string(), v.boolean())) or separate tables/keys for sensitive settings. Restrict who can write settings in mutations."
+    },
+    {
+      "title": "Error handling in API may leak information",
+      "severity": "low",
+      "file": "api/render.js",
+      "description": "catch block logs full error with console.error and returns generic 'Error rendering page'. Logging is fine but ensure no stack traces or internal paths are ever sent in res.send(). Current code does not send the error object to the client; confirm in production that error serialization never exposes stacks.",
+      "recommended_fix": "Ensure 500 responses never include error.message or stack. Keep generic message; log details server-side only. Consider a small error ID for support without exposing internals."
+    }
+  ]
+}
